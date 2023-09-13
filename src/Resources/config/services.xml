@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="audit_logger.class">MinVWS\AuditLogger\AuditLogger</parameter>
+
+        <parameter key="audit_logger.encryption.class">MinVWS\AuditLogger\EncryptionHandler</parameter>
+        <parameter key="audit_logger.psr_logger.class">MinVWS\AuditLogger\Loggers\PsrLogger</parameter>
+        <parameter key="audit_logger.file_logger.class">MinVWS\AuditLogger\Loggers\FileLogger</parameter>
+        <parameter key="audit_logger.doctrine_logger.class">MinVWS\AuditLoggerBundle\Loggers\DoctrineLogger</parameter>
+        <parameter key="audit_logger.rabbitmq_logger.class">MinVWS\AuditLoggerBundle\Loggers\RabbitmqLogger</parameter>
+    </parameters>
+
+    <services>
+        <service id="audit_logger.encryption" class="%audit_logger.encryption.class%">
+            <argument />  <!-- public key -->
+            <argument />  <!-- private key -->
+        </service>
+
+        <service id="audit_logger.file_logger" class="%audit_logger.file_logger.class%">
+            <argument />  <!-- log file path -->
+            <argument /> <!-- log Pii -->
+            <argument type="service" id="audit_logger.encryption" />
+        </service>
+
+        <service id="audit_logger.psr_logger" class="%audit_logger.psr_logger.class%">
+            <argument type="service" id="logger"/>
+            <argument /> <!-- log Pii -->
+            <argument type="service" id="audit_logger.encryption" />
+        </service>
+
+        <service id="audit_logger.doctrine_logger" class="%audit_logger.doctrine_logger.class%">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument /> <!-- log Pii -->
+            <argument type="service" id="audit_logger.encryption" />
+        </service>
+
+        <service id="audit_logger.rabbitmq_logger" class="%audit_logger.rabbitmq_logger.class%">
+            <argument>@logger</argument>
+            <argument /> <!-- log Pii -->
+            <argument type="service" id="audit_logger.encryption" />
+        </service>
+
+    </services>
+
+</container>

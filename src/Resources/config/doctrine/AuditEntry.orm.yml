@@ -1,0 +1,23 @@
+MinVWS\AuditLoggerBundle\Entity\AuditEntry:
+    type: entity
+    id:
+        id:
+            type: uuid
+            generator:
+                strategy: CUSTOM
+            customIdGenerator:
+                class: Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator
+    fields:
+        createdAt:
+            type: datetime_immutable
+            column: created_at
+        request:
+            type: json
+        eventCode:
+            type: string
+            length: 255
+        actionCode:
+            type: string
+            length: 255
+        failed:
+            type: boolean

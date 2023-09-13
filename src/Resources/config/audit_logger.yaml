@@ -1,0 +1,25 @@
+audit_logger:
+    encryption:
+        public_key:
+        private_key:
+
+    loggers:
+        psr_logger:
+            enabled: true
+            encrypted: true
+            log_pii: true
+
+        doctrine_logger:
+            enabled: true
+            encrypted: false
+            log_pii: true
+
+        file_logger:
+            enabled: true
+            path: '%kernel.logs_dir%/audit.log'
+            encrypted: true
+            log_pii: true
+
+        rabbitmq_logger:
+            enabled: true
+            additional_events: []
