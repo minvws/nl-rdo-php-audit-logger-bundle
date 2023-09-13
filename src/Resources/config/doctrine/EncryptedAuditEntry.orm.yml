@@ -1,0 +1,15 @@
+MinVWS\AuditLoggerBundle\Entity\EncryptedAuditEntry:
+    type: entity
+    id:
+        id:
+            type: uuid
+            generator:
+                strategy: CUSTOM
+            customIdGenerator:
+                class: Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator
+    fields:
+        createdAt:
+            type: datetime_immutable
+            column: created_at
+        data:
+            type: text
