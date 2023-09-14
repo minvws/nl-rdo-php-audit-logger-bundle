@@ -62,6 +62,8 @@ class Configuration implements ConfigurationInterface
                             ->booleanNode('enabled')->defaultFalse()->end()
                             ->booleanNode('encrypted')->defaultFalse()->end()
                             ->booleanNode('log_pii')->defaultFalse()->end()
+                            ->scalarNode('producer_service')->isRequired()->end()
+                            ->scalarNode('routing_key')->defaultValue("")->end()
                             ->arrayNode('additional_events')
                                 ->beforeNormalization()->castToArray()->end()
                             ->end()

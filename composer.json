@@ -39,6 +39,10 @@
       "MinVWS\\AuditLoggerBundle\\Tests\\": "tests/"
     }
   },
+  "suggest": {
+    "php-amqplib/rabbitmq-bundle": "To use the rabbitmq audit logger",
+    "doctrine/orm": "To use the doctrine audit logger"
+  },
   "scripts": {
     "test": [
         "vendor/bin/phpcs",

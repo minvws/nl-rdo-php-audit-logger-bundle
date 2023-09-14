@@ -39,7 +39,9 @@
         </service>
 
         <service id="audit_logger.rabbitmq_logger" class="%audit_logger.rabbitmq_logger.class%">
-            <argument>@logger</argument>
+            <argument /> <!-- producer_service -->
+            <argument /> <!-- routing key -->
+            <argument /> <!-- additional events -->
             <argument /> <!-- log Pii -->
             <argument type="service" id="audit_logger.encryption" />
         </service>

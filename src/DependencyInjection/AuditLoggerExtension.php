@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MinVWS\AuditLoggerBundle\DependencyInjection;
 
-use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use MinVWS\AuditLogger\AuditLogger;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -12,6 +11,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use OldSound\RabbitMqBundle\OldSoundRabbitMqBundle;
 
 class AuditLoggerExtension extends Extension
 {
@@ -77,12 +77,21 @@ class AuditLoggerExtension extends Extension
         }
 
         if ($config['loggers']['rabbitmq_logger']['enabled']) {
-            $container->getDefinition('audit_logger.rabbitmq_logger')->replaceArgument(0, $config['loggers']['rabbitmq_logger']['log_pii']);
+            if (!class_exists(OldSoundRabbitMqBundle::class, false)) {
+                throw new \Exception('RabbitMQ logger is configured to log data, but the RabbitMQ bundle is not installed. " .
+                "Please try and run "composer require php-amqplib/rabbitmq-bundle"');
+            }
+
+            $container->getDefinition('audit_logger.rabbitmq_logger')->replaceArgument(0, new Reference($config['loggers']['rabbitmq_logger']['producer_service']));
+            $container->getDefinition('audit_logger.rabbitmq_logger')->replaceArgument(1, $config['loggers']['rabbitmq_logger']['routing_key']);
+            $container->getDefinition('audit_logger.rabbitmq_logger')->replaceArgument(2, $config['loggers']['rabbitmq_logger']['additional_events']);
+
+            $container->getDefinition('audit_logger.rabbitmq_logger')->replaceArgument(3, $config['loggers']['rabbitmq_logger']['log_pii']);
             if ($config['loggers']['rabbitmq_logger']['encrypted'] && ! $encryption_configured) {
                 throw new \Exception('RabbitMQ logger is configured to log encrypted data, but no encryption keys are configured.');
             }
             if (! $config['loggers']['rabbitmq_logger']['encrypted']) {
-                $container->getDefinition('audit_logger.rabbitmq_logger')->replaceArgument(2, null);
+                $container->getDefinition('audit_logger.rabbitmq_logger')->replaceArgument(4, null);
             }
             $definition->addMethodCall('addLogger', [new Reference('audit_logger.rabbitmq_logger')]);
         } else {
