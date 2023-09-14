@@ -20,6 +20,12 @@ class AuditLoggerExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        // Since env vars are not automatically resolved in the config, we need to do it ourselves.
+        // See: https://github.com/symfony/symfony/issues/40794
+        array_walk_recursive($config, function (&$value) use ($container) {
+            $value = $container->resolveEnvPlaceholders($value, true);
+        });
+
         $this->loadServices($container, $config);
     }
 
