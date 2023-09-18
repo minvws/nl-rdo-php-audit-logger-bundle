@@ -69,6 +69,7 @@ class AuditLoggerExtension extends Extension
             $container->removeDefinition('audit_logger.file_logger');
         }
 
+<<<<<<< Updated upstream
         if ($config['loggers']['doctrine_logger']['enabled']) {
             $container->getDefinition('audit_logger.doctrine_logger')->replaceArgument(1, $config['loggers']['doctrine_logger']['log_pii']);
             if ($config['loggers']['doctrine_logger']['encrypted'] && ! $encryption_configured) {
@@ -80,18 +81,38 @@ class AuditLoggerExtension extends Extension
             $definition->addMethodCall('addLogger', [new Reference('audit_logger.doctrine_logger')]);
         } else {
             $container->removeDefinition('audit_logger.doctrine_logger');
+=======
+        if (isset($config['loggers']['doctrine_logger'])) {
+            $container->getDefinition(DoctrineLogger::class)->setArgument(
+                2,
+                $config['loggers']['doctrine_logger']['log_pii']
+            );
+
+            // Create and add encryption class
+            $definition = new Definition(EncryptionHandler::class);
+            $definition->setArgument(0, $config['loggers']['doctrine_logger']['encrypted']);
+            $definition->setArgument(1, $config['encryption']['public_key']);
+            $definition->setArgument(2, $config['encryption']['private_key']);
+            $container->getDefinition(DoctrineLogger::class)->setArgument(0, $definition);
+
+            $definition = $container->getDefinition(AuditLogger::class);
+            $definition->addMethodCall('addLogger', [new Reference(DoctrineLogger::class)]);
+>>>>>>> Stashed changes
         }
 
         if ($config['loggers']['rabbitmq_logger']['enabled']) {
             if (!class_exists(OldSoundRabbitMqBundle::class, false)) {
-                throw new \Exception('RabbitMQ logger is configured to log data, but the RabbitMQ bundle is not installed. " .
-                "Please try and run "composer require php-amqplib/rabbitmq-bundle"');
+                throw new \Exception(
+                    'RabbitMQ logger is configured to log data, but the RabbitMQ bundle is not installed. ' .
+                    'Please try and run "composer require php-amqplib/rabbitmq-bundle"'
+                );
             }
 
             $container->getDefinition('audit_logger.rabbitmq_logger')->replaceArgument(0, new Reference($config['loggers']['rabbitmq_logger']['producer_service']));
             $container->getDefinition('audit_logger.rabbitmq_logger')->replaceArgument(1, $config['loggers']['rabbitmq_logger']['routing_key']);
             $container->getDefinition('audit_logger.rabbitmq_logger')->replaceArgument(2, $config['loggers']['rabbitmq_logger']['additional_events']);
 
+<<<<<<< Updated upstream
             $container->getDefinition('audit_logger.rabbitmq_logger')->replaceArgument(3, $config['loggers']['rabbitmq_logger']['log_pii']);
             if ($config['loggers']['rabbitmq_logger']['encrypted'] && ! $encryption_configured) {
                 throw new \Exception('RabbitMQ logger is configured to log encrypted data, but no encryption keys are configured.');
@@ -102,6 +123,23 @@ class AuditLoggerExtension extends Extension
             $definition->addMethodCall('addLogger', [new Reference('audit_logger.rabbitmq_logger')]);
         } else {
             $container->removeDefinition('audit_logger.rabbitmq_logger');
+=======
+            $container->getDefinition(RabbitmqLogger::class)->setArgument(
+                1,
+                new Reference($config['loggers']['rabbitmq_logger']['producer_service'])
+            );
+            $container->getDefinition(RabbitmqLogger::class)->setArgument(
+                2,
+                $config['loggers']['rabbitmq_logger']['routing_key']
+            );
+            $container->getDefinition(RabbitmqLogger::class)->setArgument(
+                3,
+                $config['loggers']['rabbitmq_logger']['additional_events']
+            );
+
+            $definition = $container->getDefinition(AuditLogger::class);
+            $definition->addMethodCall('addLogger', [new Reference(RabbitmqLogger::class)]);
+>>>>>>> Stashed changes
         }
     }
 }

@@ -18,8 +18,17 @@ class DoctrineLogger implements LoggerInterface
     protected ?EncryptionHandler $encryptionHandler;
     protected EntityManagerInterface $doctrine;
 
+<<<<<<< Updated upstream
     public function __construct(EntityManagerInterface $doctrine, bool $logPiiData = false, EncryptionHandler $encryptionHandler = null)
     {
+=======
+    public function __construct(
+        EncryptionHandler $encryptionHandler,
+        EntityManagerInterface $doctrine,
+        bool $logPiiData = false
+    ) {
+        $this->encryptionHandler = $encryptionHandler;
+>>>>>>> Stashed changes
         $this->doctrine = $doctrine;
         $this->encryptionHandler = $encryptionHandler;
         $this->logPiiData = $logPiiData;
