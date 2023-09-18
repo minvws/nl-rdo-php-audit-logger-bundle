@@ -1,0 +1,35 @@
+services:
+    MinVWS\AuditLogger\AuditLogger:
+        autowire: true
+        autoconfigure: true
+
+    MinVWS\AuditLogger\Loggers\FileLogger:
+        autowire: true
+        autoconfigure: true
+        arguments:
+            $encryptionHandler: null
+            $auditLogFilePath: ''
+            $logPiiData: false
+
+    MinVWS\AuditLogger\Loggers\PsrLogger:
+        autowire: true
+        autoconfigure: true
+        arguments:
+            $encryptionHandler: null
+            $logPiiData: false
+            $logger: '@logger'
+
+    MinVWS\AuditLoggerBundle\Loggers\DoctrineLogger:
+        autowire: true
+        autoconfigure: true
+        arguments:
+            $encryptionHandler: null
+            $doctrine: '@doctrine.orm.entity_manager'
+            $logPiiData: false
+
+    MinVWS\AuditLoggerBundle\Loggers\RabbitmqLogger:
+        autowire: true
+        autoconfigure: true
+        arguments:
+            $encryptionHandler: null
+            $logPiiData: false

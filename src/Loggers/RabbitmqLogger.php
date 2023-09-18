@@ -20,11 +20,11 @@ class RabbitmqLogger implements LoggerInterface
     protected array $additional_events;
 
     public function __construct(
+        EncryptionHandler $encryptionHandler,
         ProducerInterface $auditLogProducer,
         string $routingKey = '',
         $additional_events = [],
         bool $logPiiData = false,
-        EncryptionHandler $encryptionHandler = null
     ) {
         $this->encryptionHandler = $encryptionHandler;
         $this->logPiiData = $logPiiData;
@@ -37,7 +37,7 @@ class RabbitmqLogger implements LoggerInterface
     {
         $data = ($this->logPiiData) ? $event->getMergedPiiData() : $event->getLogData();
 
-        if ($this->encryptionHandler !== null) {
+        if ($this->encryptionHandler->isEnabled()) {
             $data = $this->encryptionHandler->encrypt($data);
         } else {
             $data = json_encode($data);
