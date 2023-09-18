@@ -18,10 +18,10 @@ class DoctrineLogger implements LoggerInterface
     protected ?EncryptionHandler $encryptionHandler;
     protected EntityManagerInterface $doctrine;
 
-    public function __construct(EntityManagerInterface $doctrine, bool $logPiiData = false, EncryptionHandler $encryptionHandler = null)
+    public function __construct(EncryptionHandler $encryptionHandler, EntityManagerInterface $doctrine, bool $logPiiData = false)
     {
-        $this->doctrine = $doctrine;
         $this->encryptionHandler = $encryptionHandler;
+        $this->doctrine = $doctrine;
         $this->logPiiData = $logPiiData;
     }
 
@@ -29,7 +29,7 @@ class DoctrineLogger implements LoggerInterface
     {
         $data = ($this->logPiiData) ? $event->getMergedPiiData() : $event->getLogData();
 
-        if ($this->encryptionHandler !== null) {
+        if ($this->encryptionHandler->isEnabled()) {
             $data = $this->encryptionHandler->encrypt($data);
             $entity = new EncryptedAuditEntry();
             $entity->setCreatedAt(new \DateTimeImmutable());
