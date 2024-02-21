@@ -63,7 +63,9 @@ class AuditLoggerExtension extends Extension
         }
 
         if (isset($config['loggers']['doctrine_logger'])) {
-            $container->getDefinition(DoctrineLogger::class)->setArgument(2, $config['loggers']['doctrine_logger']['log_pii']);
+            $container
+                ->getDefinition(DoctrineLogger::class)
+                ->setArgument(2, $config['loggers']['doctrine_logger']['log_pii']);
 
             // Create and add encryption class
             $definition = new Definition(EncryptionHandler::class);
@@ -78,8 +80,10 @@ class AuditLoggerExtension extends Extension
 
         if (isset($config['loggers']['rabbitmq_logger'])) {
             if (!class_exists(OldSoundRabbitMqBundle::class, false)) {
-                throw new \Exception('RabbitMQ logger is configured to log data, but the RabbitMQ bundle is not installed. " .
-                "Please try and run "composer require php-amqplib/rabbitmq-bundle"');
+                throw new \Exception(
+                    'RabbitMQ logger is configured to log data, but the RabbitMQ bundle is not installed. " .
+                    "Please try and run "composer require php-amqplib/rabbitmq-bundle"',
+                );
             }
 
             // Create and add encryption class
@@ -89,9 +93,15 @@ class AuditLoggerExtension extends Extension
             $definition->setArgument(2, $config['encryption']['private_key']);
             $container->getDefinition(RabbitmqLogger::class)->setArgument(0, $definition);
 
-            $container->getDefinition(RabbitmqLogger::class)->setArgument(1, new Reference($config['loggers']['rabbitmq_logger']['producer_service']));
-            $container->getDefinition(RabbitmqLogger::class)->setArgument(2, $config['loggers']['rabbitmq_logger']['routing_key']);
-            $container->getDefinition(RabbitmqLogger::class)->setArgument(3, $config['loggers']['rabbitmq_logger']['additional_events']);
+            $container
+                ->getDefinition(RabbitmqLogger::class)
+                ->setArgument(1, new Reference($config['loggers']['rabbitmq_logger']['producer_service']));
+            $container
+                ->getDefinition(RabbitmqLogger::class)
+                ->setArgument(2, $config['loggers']['rabbitmq_logger']['routing_key']);
+            $container
+                ->getDefinition(RabbitmqLogger::class)
+                ->setArgument(3, $config['loggers']['rabbitmq_logger']['additional_events']);
 
             $definition = $container->getDefinition(AuditLogger::class);
             $definition->addMethodCall('addLogger', [new Reference(RabbitmqLogger::class)]);

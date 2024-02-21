@@ -6,9 +6,9 @@ namespace MinVWS\AuditLoggerBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-class AuditLoggerBundle extends Bundle
+class AuditLoggerBundle extends AbstractBundle
 {
     public function build(ContainerBuilder $container)
     {
