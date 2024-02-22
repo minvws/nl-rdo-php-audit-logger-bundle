@@ -18,16 +18,44 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use OldSound\RabbitMqBundle\OldSoundRabbitMqBundle;
 
+/**
+ * @phpstan-type ConfigurationArray array{
+ *   encryption: array{public_key: scalar, private_key: scalar},
+ *   loggers: array{
+ *     psr_logger?: array{enabled: bool, encrypted: bool, log_pii: bool},
+ *     doctrine_logger?: array{enabled: bool, encrypted: bool, log_pii: bool},
+ *     file_logger?: array{enabled: bool, encrypted: bool, log_pii: bool, path: scalar},
+ *     rabbitmq_logger?: array{
+ *       enabled: bool,
+ *       encrypted: bool,
+ *       log_pii: bool,
+ *       producer_service: scalar,
+ *       routing_key: scalar,
+ *       additional_events: array<string, string>
+ *     },
+ *   }
+ * }
+ */
 class AuditLoggerExtension extends Extension
 {
+    /**
+     * @param array<mixed> $configs
+     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
+        /**
+         * @phpstan-var ConfigurationArray $config
+         * @var array<mixed> $config
+         */
         $config = $this->processConfiguration($configuration, $configs);
 
         $this->loadServices($container, $config);
     }
 
+    /**
+     * @param ConfigurationArray $config
+     */
     private function loadServices(ContainerBuilder $container, array $config): void
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
@@ -95,7 +123,7 @@ class AuditLoggerExtension extends Extension
 
             $container
                 ->getDefinition(RabbitmqLogger::class)
-                ->setArgument(1, new Reference($config['loggers']['rabbitmq_logger']['producer_service']));
+                ->setArgument(1, new Reference((string) $config['loggers']['rabbitmq_logger']['producer_service']));
             $container
                 ->getDefinition(RabbitmqLogger::class)
                 ->setArgument(2, $config['loggers']['rabbitmq_logger']['routing_key']);

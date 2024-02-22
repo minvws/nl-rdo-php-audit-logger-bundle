@@ -21,6 +21,9 @@ class AuditEntry
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
+    /**
+     * @var array<array-key,mixed>
+     */
     #[ORM\Column(type: Types::JSON)]
     private array $request;
 
@@ -50,11 +53,17 @@ class AuditEntry
         return $this;
     }
 
+    /**
+     * @return array<array-key,mixed>
+     */
     public function getRequest(): array
     {
         return $this->request;
     }
 
+    /**
+     * @param array<array-key,mixed> $request
+     */
     public function setRequest(array $request): static
     {
         $this->request = $request;

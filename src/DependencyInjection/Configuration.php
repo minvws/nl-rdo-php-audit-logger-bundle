@@ -11,7 +11,9 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        return (new TreeBuilder('audit_logger'))
+        $treeBuilder = new TreeBuilder('audit_logger');
+
+        $treeBuilder
             ->getRootNode()
             ->children()
             ->arrayNode('encryption')
@@ -64,5 +66,7 @@ class Configuration implements ConfigurationInterface
 
                 ->end()
             ->end();
+
+        return $treeBuilder;
     }
 }
