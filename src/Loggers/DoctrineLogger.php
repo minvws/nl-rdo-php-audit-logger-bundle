@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MinVWS\AuditLoggerBundle\Loggers;
 
+use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use MinVWS\AuditLogger\EncryptionHandler;
 use MinVWS\AuditLogger\Events\Logging\GeneralLogEvent;
@@ -15,11 +16,14 @@ use MinVWS\AuditLoggerBundle\Entity\EncryptedAuditEntry;
 class DoctrineLogger implements LoggerInterface
 {
     protected bool $logPiiData;
-    protected ?EncryptionHandler $encryptionHandler;
+    protected EncryptionHandler $encryptionHandler;
     protected EntityManagerInterface $doctrine;
 
-    public function __construct(EncryptionHandler $encryptionHandler, EntityManagerInterface $doctrine, bool $logPiiData = false)
-    {
+    public function __construct(
+        EncryptionHandler $encryptionHandler,
+        EntityManagerInterface $doctrine,
+        bool $logPiiData = false,
+    ) {
         $this->encryptionHandler = $encryptionHandler;
         $this->doctrine = $doctrine;
         $this->logPiiData = $logPiiData;
@@ -30,13 +34,16 @@ class DoctrineLogger implements LoggerInterface
         $data = ($this->logPiiData) ? $event->getMergedPiiData() : $event->getLogData();
 
         if ($this->encryptionHandler->isEnabled()) {
-            $data = $this->encryptionHandler->encrypt($data);
+            $dataAsJsonString = json_encode($data, JSON_THROW_ON_ERROR);
+            $data = $this->encryptionHandler->encrypt($dataAsJsonString);
             $entity = new EncryptedAuditEntry();
-            $entity->setCreatedAt(new \DateTimeImmutable());
+            $entity->setCreatedAt(CarbonImmutable::now());
             $entity->setData($data);
         } else {
+            assert($data['created_at'] instanceof \DateTimeImmutable);
+
             $entity = new AuditEntry();
-            $entity->setCreatedAt(new \DateTimeImmutable());
+            $entity->setCreatedAt(CarbonImmutable::now());
             $entity->setRequest($data);
             $entity->setCreatedAt($data['created_at']);
             $entity->setEventCode($data['event_code']);

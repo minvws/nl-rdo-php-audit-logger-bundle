@@ -9,18 +9,12 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('audit_logger');
 
-        // Keep compatibility with symfony/config < 4.2
-        if (\method_exists($treeBuilder, 'getRootNode')) {
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            $rootNode = $treeBuilder->root('audit_logger');
-        }
-
-        $rootNode
+        $treeBuilder
+            ->getRootNode()
             ->children()
             ->arrayNode('encryption')
                 ->children()
