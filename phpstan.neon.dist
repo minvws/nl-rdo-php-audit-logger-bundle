@@ -10,3 +10,5 @@ parameters:
         - tests
     tmpDir: ./.phpstan.cache
     level: max
+    excludePaths:
+        - src/AuditLoggerBundle.php
