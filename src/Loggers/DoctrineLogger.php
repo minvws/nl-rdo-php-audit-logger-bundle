@@ -6,7 +6,7 @@ namespace MinVWS\AuditLoggerBundle\Loggers;
 
 use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use MinVWS\AuditLogger\EncryptionHandler;
+use MinVWS\AuditLogger\Handlers\EncryptionHandler;
 use MinVWS\AuditLogger\Events\Logging\GeneralLogEvent;
 use MinVWS\AuditLogger\Loggers\LogEventInterface;
 use MinVWS\AuditLogger\Loggers\LoggerInterface;
