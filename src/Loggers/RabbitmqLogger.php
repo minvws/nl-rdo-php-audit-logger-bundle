@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MinVWS\AuditLoggerBundle\Loggers;
 
-use MinVWS\AuditLogger\EncryptionHandler;
+use MinVWS\AuditLogger\Handlers\EncryptionHandler;
 use MinVWS\AuditLogger\Events\Logging\GeneralLogEvent;
 use MinVWS\AuditLogger\Loggers\LogEventInterface;
 use MinVWS\AuditLogger\Loggers\LoggerInterface;

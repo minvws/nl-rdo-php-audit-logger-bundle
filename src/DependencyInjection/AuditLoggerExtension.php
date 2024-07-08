@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MinVWS\AuditLoggerBundle\DependencyInjection;
 
 use MinVWS\AuditLogger\AuditLogger;
-use MinVWS\AuditLogger\EncryptionHandler;
+use MinVWS\AuditLogger\Handlers\EncryptionHandler;
 use MinVWS\AuditLogger\Loggers\FileLogger;
 use MinVWS\AuditLogger\Loggers\PsrLogger;
 use MinVWS\AuditLoggerBundle\Loggers\DoctrineLogger;
