@@ -29,8 +29,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -50,6 +48,26 @@ jobs:
         run: composer checkstyle
       - name: Execute tests (Unit and Feature)
         run: composer test-report
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports-${{ matrix.php }}${{ matrix.composer_flags}}
+          path: |
+            report-phpunit.xml
+            coverage-phpunit.xml
+
+
+  sonar:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download reports
+        uses: actions/download-artifact@v4
+        with:
+          name: reports-8.3
       - name: Run SonarCloud scanner
         uses: minvws/nl-irealisatie-generic-pipelines/.github/actions/sonarcloud@main
         with:
