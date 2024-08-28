@@ -56,9 +56,10 @@ jobs:
             report-phpunit.xml
             coverage-phpunit.xml
 
-
   sonar:
+    name: 'SonarCloud'
     runs-on: ubuntu-22.04
+    needs: validate
     steps:
       - name: Checkout
         uses: actions/checkout@v4
