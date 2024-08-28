@@ -50,8 +50,9 @@ jobs:
         run: composer test-report
       - name: Upload reports
         uses: actions/upload-artifact@v4
+        if: ${{ matrix.php == '8.3' &&  matrix.symfony_version == '7.*' &&  matrix.composer_flags == '' }}
         with:
-          name: reports PHP${{ matrix.php }} Symfony ${{ matrix.symfony_version }} ${{ matrix.composer_flags}}
+          name: reports
           path: |
             report-phpunit.xml
             coverage-phpunit.xml
@@ -68,7 +69,7 @@ jobs:
       - name: Download reports
         uses: actions/download-artifact@v4
         with:
-          name: reports PHP8.3 Symfony 7.*
+          name: reports
       - name: Run SonarCloud scanner
         uses: minvws/nl-irealisatie-generic-pipelines/.github/actions/sonarcloud@main
         with:
