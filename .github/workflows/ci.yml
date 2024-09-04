@@ -1,13 +1,14 @@
-name: Continuous Integration
+name: CI
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
+    tags: [ v* ]
   pull_request:
-    branches: [ main, develop ]
 
 jobs:
-  tests:
+  validate:
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
@@ -18,9 +19,9 @@ jobs:
         exclude:
           - php: "8.1"
             symfony_version: "7.*"
-    name: PHP ${{ matrix.php }} Symfony ${{ matrix.symfony_version }} ${{ matrix.composer_flags}}
+    name: 'Build & validate: PHP ${{ matrix.php }} Symfony ${{ matrix.symfony_version }} ${{ matrix.composer_flags}}'
     env:
-        PHP: ${{ matrix.os }}
+        PHP: ${{ matrix.php }}
         COMPOSER_MEMORY_LIMIT: -1
         COMPOSER_FLAGS: ${{ matrix.composer_flags }}
         SYMFONY_VERSION: ${{ matrix.symfony_version }}
@@ -42,8 +43,34 @@ jobs:
           if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
           composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
       - name: Static analysis with PHPStan
-        run: composer checktype
+        run: composer checktype-ci
       - name: Coding style PSR12 Check
         run: composer checkstyle
       - name: Execute tests (Unit and Feature)
-        run: composer test
+        run: composer test-report-ci
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        if: ${{ matrix.php == '8.3' &&  matrix.symfony_version == '7.*' &&  matrix.composer_flags == '' }}
+        with:
+          name: reports
+          path: |
+            report-phpunit.xml
+            coverage-phpunit.xml
+
+  sonar:
+    name: 'SonarCloud'
+    runs-on: ubuntu-22.04
+    needs: validate
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download reports
+        uses: actions/download-artifact@v4
+        with:
+          name: reports
+      - name: Run SonarCloud scanner
+        uses: minvws/nl-irealisatie-generic-pipelines/.github/actions/sonarcloud@main
+        with:
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
