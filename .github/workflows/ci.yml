@@ -45,9 +45,9 @@ jobs:
       - name: Static analysis with PHPStan
         run: composer checktype
       - name: Coding style PSR12 Check
-        run: composer checkstyle
+        run: composer checkstyle-ci
       - name: Execute tests (Unit and Feature)
-        run: composer test-report
+        run: composer test-report-ci
       - name: Upload reports
         uses: actions/upload-artifact@v4
         if: ${{ matrix.php == '8.3' &&  matrix.symfony_version == '7.*' &&  matrix.composer_flags == '' }}
