@@ -1,4 +1,5 @@
 includes:
+    - phpstan-baseline.neon
     - vendor/phpstan/phpstan-mockery/extension.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
     - vendor/phpstan/phpstan-symfony/extension.neon
@@ -10,5 +11,3 @@ parameters:
         - tests
     tmpDir: ./.phpstan.cache
     level: max
-    excludePaths:
-        - src/AuditLoggerBundle.php
