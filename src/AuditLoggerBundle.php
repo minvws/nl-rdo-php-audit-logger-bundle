@@ -207,6 +207,7 @@ class AuditLoggerBundle extends AbstractBundle
         $container->addCompilerPass(DoctrineOrmMappingsPass::createAttributeMappingDriver(
             ['MinVWS\AuditLoggerBundle\Entity'],
             [$path],
+            reportFieldsWhereDeclared: true,
         ));
     }
 
