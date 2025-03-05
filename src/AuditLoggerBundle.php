@@ -159,11 +159,10 @@ class AuditLoggerBundle extends AbstractBundle
     {
         parent::build($container);
 
-        $mappings = [
-            realpath(__DIR__ . '/Resources/config/doctrine') => 'MinVWS\AuditLoggerBundle\Entity',
-        ];
-
-        $container->addCompilerPass(DoctrineOrmMappingsPass::createYamlMappingDriver($mappings));
+        $container->addCompilerPass(DoctrineOrmMappingsPass::createAttributeMappingDriver(
+            ['MinVWS\AuditLoggerBundle\Entity'],
+            [realpath(__DIR__ . '/Entity')],
+        ));
     }
 
     public function getAlias(): string
