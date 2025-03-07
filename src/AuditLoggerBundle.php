@@ -12,6 +12,7 @@ use MinVWS\AuditLogger\Loggers\PsrLogger;
 use MinVWS\AuditLoggerBundle\Loggers\DoctrineLogger;
 use MinVWS\AuditLoggerBundle\Loggers\RabbitmqLogger;
 use OldSound\RabbitMqBundle\OldSoundRabbitMqBundle;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -19,11 +20,49 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
+use function realpath;
+
+/**
+ * @phpstan-type ConfigEncryptionArray array{public_key: string, private_key: string}
+ * @phpstan-type ConfigLoggersArray array{
+ *      enabled: bool,
+ *      encrypted: bool,
+ *      log_pii: bool,
+ *  }
+ * @phpstan-type ConfigFileLoggersArray array{
+ *      enabled: bool,
+ *      encrypted: bool,
+ *      log_pii: bool,
+ *      path: string,
+ *  }
+ * @phpstan-type ConfigRabbitMqLoggersArray array{
+ *      enabled: bool,
+ *      encrypted: bool,
+ *      log_pii: bool,
+ *      path: string,
+ *      producer_service: string,
+ *      routing_key: string,
+ *      additional_events: array<string,string>,
+ *  }
+ * @phpstan-type ConfigArray array{
+ *      encryption: ConfigEncryptionArray,
+ *      loggers: array{
+ *          psr_logger?: ConfigLoggersArray,
+ *          doctrine_logger?: ConfigLoggersArray,
+ *          file_logger?: ConfigFileLoggersArray,
+ *          rabbitmq_logger?: ConfigRabbitMqLoggersArray,
+ *      }
+ *  }
+ */
 class AuditLoggerBundle extends AbstractBundle
 {
     public function configure(DefinitionConfigurator $definition): void
     {
-        $definition->rootNode()
+        $arrayDef = $definition->rootNode();
+
+        assert($arrayDef instanceof ArrayNodeDefinition);
+
+        $arrayDef
             ->children()
             ->arrayNode('encryption')
                 ->children()
@@ -76,6 +115,9 @@ class AuditLoggerBundle extends AbstractBundle
             ->end();
     }
 
+    /**
+     * @phpstan-param ConfigArray $config
+     */
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('Resources/config/services.yml');
@@ -159,11 +201,14 @@ class AuditLoggerBundle extends AbstractBundle
     {
         parent::build($container);
 
-        $mappings = [
-            realpath(__DIR__ . '/Resources/config/doctrine') => 'MinVWS\AuditLoggerBundle\Entity',
-        ];
+        $path = realpath(__DIR__ . '/Entity');
+        assert($path !== false);
 
-        $container->addCompilerPass(DoctrineOrmMappingsPass::createYamlMappingDriver($mappings));
+        $container->addCompilerPass(DoctrineOrmMappingsPass::createAttributeMappingDriver(
+            ['MinVWS\AuditLoggerBundle\Entity'],
+            [$path],
+            reportFieldsWhereDeclared: true,
+        ));
     }
 
     public function getAlias(): string
