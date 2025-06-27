@@ -8,12 +8,6 @@
     ],
     "type": "symfony-bundle",
     "license": "EUPL",
-    "repositories": {
-        "minvws/audit-logger": {
-            "type": "vcs",
-            "url": "git@github.com:minvws/nl-rdo-php-audit-logger.git"
-        }
-    },
     "require": {
         "php": "^8.1",
         "doctrine/doctrine-bundle": "^2.11",
