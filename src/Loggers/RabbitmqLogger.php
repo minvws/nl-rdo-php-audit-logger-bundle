@@ -34,7 +34,7 @@ class RabbitmqLogger implements LoggerInterface
         $dataAsJsonString = json_encode($data, JSON_THROW_ON_ERROR);
 
         if ($this->encryptionHandler->isEnabled()) {
-            $data = $this->encryptionHandler->encrypt($dataAsJsonString);
+            $dataAsJsonString = $this->encryptionHandler->encrypt($dataAsJsonString);
         }
 
         $this->auditLogProducer->publish($dataAsJsonString, $this->routingKey);
