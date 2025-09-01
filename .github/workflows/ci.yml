@@ -34,11 +34,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: xdebug, zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_READONLY_TOKEN }}
       - name: Install dependencies
-        env:
-          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.REPO_READ_ONLY_TOKEN }}"}}'
         run: |
           if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
           composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
