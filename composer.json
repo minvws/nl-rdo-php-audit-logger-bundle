@@ -7,7 +7,7 @@
         "symfony"
     ],
     "type": "symfony-bundle",
-    "license": "EUPL",
+    "license": "EUPL-1.2",
     "require": {
         "php": "^8.1",
         "doctrine/doctrine-bundle": "^2.11",
