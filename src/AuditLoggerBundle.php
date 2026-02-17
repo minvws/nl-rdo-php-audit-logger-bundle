@@ -122,7 +122,7 @@ class AuditLoggerBundle extends AbstractBundle
     {
         $container->import('Resources/config/services.yml');
 
-        if (isset($config['loggers']['psr_logger'])) {
+        if (isset($config['loggers']['psr_logger']) && $config['loggers']['psr_logger']['enabled']) {
             $builder->getDefinition(PsrLogger::class)->setArgument(2, $config['loggers']['psr_logger']['log_pii']);
 
             // Create and add encryption class
@@ -136,7 +136,7 @@ class AuditLoggerBundle extends AbstractBundle
             $definition->addMethodCall('addLogger', [new Reference(PsrLogger::class)]);
         }
 
-        if (isset($config['loggers']['file_logger'])) {
+        if (isset($config['loggers']['file_logger']) && $config['loggers']['file_logger']['enabled']) {
             $builder->getDefinition(FileLogger::class)->setArgument(1, $config['loggers']['file_logger']['path']);
             $builder->getDefinition(FileLogger::class)->setArgument(2, $config['loggers']['file_logger']['log_pii']);
 
@@ -151,7 +151,7 @@ class AuditLoggerBundle extends AbstractBundle
             $definition->addMethodCall('addLogger', [new Reference(FileLogger::class)]);
         }
 
-        if (isset($config['loggers']['doctrine_logger'])) {
+        if (isset($config['loggers']['doctrine_logger']) && $config['loggers']['doctrine_logger']['enabled']) {
             $builder
                 ->getDefinition(DoctrineLogger::class)
                 ->setArgument(2, $config['loggers']['doctrine_logger']['log_pii']);
@@ -167,7 +167,7 @@ class AuditLoggerBundle extends AbstractBundle
             $definition->addMethodCall('addLogger', [new Reference(DoctrineLogger::class)]);
         }
 
-        if (isset($config['loggers']['rabbitmq_logger'])) {
+        if (isset($config['loggers']['rabbitmq_logger']) && $config['loggers']['rabbitmq_logger']['enabled']) {
             if (!class_exists(OldSoundRabbitMqBundle::class, false)) {
                 throw new \Exception(
                     'RabbitMQ logger is configured to log data, but the RabbitMQ bundle is not installed. '
