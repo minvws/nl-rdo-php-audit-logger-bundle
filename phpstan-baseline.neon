@@ -1,11 +1,19 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$config \\(array\\{encryption\\: array\\{public_key\\: string, private_key\\: string\\}, loggers\\: array\\{psr_logger\\?\\: array\\{enabled\\: bool, encrypted\\: bool, log_pii\\: bool\\}, doctrine_logger\\?\\: array\\{enabled\\: bool, encrypted\\: bool, log_pii\\: bool\\}, file_logger\\?\\: array\\{enabled\\: bool, encrypted\\: bool, log_pii\\: bool, path\\: string\\}, rabbitmq_logger\\?\\: array\\{enabled\\: bool, encrypted\\: bool, log_pii\\: bool, path\\: string, producer_service\\: string, routing_key\\: string, additional_events\\: array\\<string, string\\>\\}\\}\\}\\) of method MinVWS\\\\AuditLoggerBundle\\\\AuditLoggerBundle\\:\\:loadExtension\\(\\) should be contravariant with parameter \\$config \\(array\\) of method Symfony\\\\Component\\\\DependencyInjection\\\\Extension\\\\ConfigurableExtensionInterface\\:\\:loadExtension\\(\\)$#"
+			message: '#^Parameter \#1 \$config \(array\{encryption\: array\{public_key\: string, private_key\: string\}, loggers\: array\{psr_logger\?\: array\{enabled\: bool, encrypted\: bool, log_pii\: bool\}, doctrine_logger\?\: array\{enabled\: bool, encrypted\: bool, log_pii\: bool\}, file_logger\?\: array\{enabled\: bool, encrypted\: bool, log_pii\: bool, path\: string\}, rabbitmq_logger\?\: array\{enabled\: bool, encrypted\: bool, log_pii\: bool, path\: string, producer_service\: string, routing_key\: string, additional_events\: array\<string, string\>\}\}\}\) of method MinVWS\\AuditLoggerBundle\\AuditLoggerBundle\:\:loadExtension\(\) should be contravariant with parameter \$config \(array\) of method Symfony\\Component\\DependencyInjection\\Extension\\ConfigurableExtensionInterface\:\:loadExtension\(\)$#'
+			identifier: method.childParameterType
 			count: 1
 			path: src/AuditLoggerBundle.php
 
 		-
-			message: "#^Parameter \\#1 \\$config \\(array\\{encryption\\: array\\{public_key\\: string, private_key\\: string\\}, loggers\\: array\\{psr_logger\\?\\: array\\{enabled\\: bool, encrypted\\: bool, log_pii\\: bool\\}, doctrine_logger\\?\\: array\\{enabled\\: bool, encrypted\\: bool, log_pii\\: bool\\}, file_logger\\?\\: array\\{enabled\\: bool, encrypted\\: bool, log_pii\\: bool, path\\: string\\}, rabbitmq_logger\\?\\: array\\{enabled\\: bool, encrypted\\: bool, log_pii\\: bool, path\\: string, producer_service\\: string, routing_key\\: string, additional_events\\: array\\<string, string\\>\\}\\}\\}\\) of method MinVWS\\\\AuditLoggerBundle\\\\AuditLoggerBundle\\:\\:loadExtension\\(\\) should be contravariant with parameter \\$config \\(array\\) of method Symfony\\\\Component\\\\HttpKernel\\\\Bundle\\\\AbstractBundle\\:\\:loadExtension\\(\\)$#"
+			message: '#^Parameter \#1 \$config \(array\{encryption\: array\{public_key\: string, private_key\: string\}, loggers\: array\{psr_logger\?\: array\{enabled\: bool, encrypted\: bool, log_pii\: bool\}, doctrine_logger\?\: array\{enabled\: bool, encrypted\: bool, log_pii\: bool\}, file_logger\?\: array\{enabled\: bool, encrypted\: bool, log_pii\: bool, path\: string\}, rabbitmq_logger\?\: array\{enabled\: bool, encrypted\: bool, log_pii\: bool, path\: string, producer_service\: string, routing_key\: string, additional_events\: array\<string, string\>\}\}\}\) of method MinVWS\\AuditLoggerBundle\\AuditLoggerBundle\:\:loadExtension\(\) should be contravariant with parameter \$config \(array\) of method Symfony\\Component\\HttpKernel\\Bundle\\AbstractBundle\:\:loadExtension\(\)$#'
+			identifier: method.childParameterType
+			count: 1
+			path: src/AuditLoggerBundle.php
+
+		-
+			message: '#^Unknown parameter \$reportFieldsWhereDeclared in call to static method Doctrine\\Bundle\\DoctrineBundle\\DependencyInjection\\Compiler\\DoctrineOrmMappingsPass\:\:createAttributeMappingDriver\(\)\.$#'
+			identifier: argument.unknown
 			count: 1
 			path: src/AuditLoggerBundle.php
