@@ -6,7 +6,7 @@ syslog or other destinations.
 
 ## Prerequisites
 
-- PHP >= 8.1
+- PHP >= 8.3
 - Composer
 - Symfony >= 6.3
 
