@@ -11,9 +11,3 @@ parameters:
 			identifier: method.childParameterType
 			count: 1
 			path: src/AuditLoggerBundle.php
-
-		-
-			message: '#^Unknown parameter \$reportFieldsWhereDeclared in call to static method Doctrine\\Bundle\\DoctrineBundle\\DependencyInjection\\Compiler\\DoctrineOrmMappingsPass\:\:createAttributeMappingDriver\(\)\.$#'
-			identifier: argument.unknown
-			count: 1
-			path: src/AuditLoggerBundle.php

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MinVWS\AuditLoggerBundle;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use MinVWS\AuditLogger\AuditLogger;
 use MinVWS\AuditLogger\Handlers\EncryptionHandler;
 use MinVWS\AuditLogger\Loggers\FileLogger;
@@ -202,10 +203,10 @@ class AuditLoggerBundle extends AbstractBundle
         $path = realpath(__DIR__ . '/Entity');
         assert($path !== false);
 
-        $container->addCompilerPass(DoctrineOrmMappingsPass::createAttributeMappingDriver(
+        $container->addCompilerPass(new DoctrineOrmMappingsPass(
+            new Definition(AttributeDriver::class, [[$path], true]),
             ['MinVWS\AuditLoggerBundle\Entity'],
-            [$path],
-            reportFieldsWhereDeclared: true,
+            [],
         ));
     }
 
