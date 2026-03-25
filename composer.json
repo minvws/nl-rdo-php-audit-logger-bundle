@@ -14,9 +14,9 @@
         "doctrine/orm": "^2.0 | ^3.0",
         "minvws/audit-logger": "^0.4.0",
         "nesbot/carbon": "^2.70 | ^3.0",
-        "symfony/dependency-injection": "^6.3 | ^7.0 | ^8.0",
-        "symfony/http-kernel": "^6.3 | ^7.0 | ^8.0",
-        "symfony/uid": "^6.3 | ^7.0 | ^8.0"
+        "symfony/dependency-injection": "^6.0 | ^7.0 | ^8.0",
+        "symfony/http-kernel": "^6.0 | ^7.0 | ^8.0",
+        "symfony/uid": "^6.0 | ^7.0 | ^8.0"
     },
     "require-dev": {
         "dg/bypass-finals": "^1.6",
@@ -55,8 +55,8 @@
         "checktype-ci": "XDEBUG_MODE=off phpstan analyse --memory-limit=-1 --error-format=prettyJson > phpstan.json",
         "update-type-baseline": "XDEBUG_MODE=off phpstan --memory-limit=-1 --generate-baseline",
         "test": "XDEBUG_MODE=off CREATE_SNAPSHOTS=false phpunit",
-        "test-report": "XDEBUG_MODE=coverage phpunit --coverage-text --coverage-html coverage/html",
-        "test-report-ci": "XDEBUG_MODE=coverage phpunit --log-junit=report-phpunit.xml --coverage-text --coverage-clover=coverage-phpunit.xml",
+        "test-report": "XDEBUG_MODE=coverage CREATE_SNAPSHOTS=false phpunit --coverage-text --coverage-html coverage/html",
+        "test-report-ci": "XDEBUG_MODE=coverage CREATE_SNAPSHOTS=false phpunit --log-junit=report-phpunit.xml --coverage-text --coverage-clover=coverage-phpunit.xml",
         "update-test-snapshots": "XDEBUG_MODE=off UPDATE_SNAPSHOTS=true phpunit",
         "checkall": [
             "@lint",
@@ -70,6 +70,7 @@
         "checkstyle": "Check code style using php_codesniffer",
         "fixstyle": "Fix code style using php_codesniffer",
         "checktype": "Check code type using PHPStan",
+        "checktype-ci": "Check code type using PHPStan and output results in JSON format for CI",
         "update-type-baseline": "Update PHPStan baseline",
         "test": "Run PHPUnit tests",
         "test-report": "Run PHPUnit tests with coverage report",
