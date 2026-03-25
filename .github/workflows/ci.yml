@@ -15,7 +15,7 @@ jobs:
       matrix:
         php: [ "8.3", "8.4", "8.5" ]
         composer_flags: [ "", "--prefer-lowest" ]
-        symfony_version: [ "6.*", "7.*", "8.*" ]
+        symfony_version: [ "", "^6.0", "^7.0" ]
         exclude:
           - php: "8.3"
             symfony_version: "8.*"
@@ -38,16 +38,19 @@ jobs:
         run: |
           if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
           composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
+      - name: Static analysis with PHPStan (human readable)
+        if: ${{ matrix.symfony_version != '^6.0' && matrix.composer_flags == '' }}
+        run: composer checktype
       - name: Static analysis with PHPStan
         run: composer checktype-ci
-        if: ${{ matrix.php == '8.4' &&  matrix.symfony_version == '7.*' &&  matrix.composer_flags == '' }}
+        if: ${{ matrix.symfony_version != '^6.0' && matrix.composer_flags == '' }}
       - name: Coding style PSR12 Check
         run: composer checkstyle
       - name: Execute tests (Unit and Feature)
         run: composer test-report-ci
       - name: Upload reports
         uses: actions/upload-artifact@v4
-        if: ${{ matrix.php == '8.4' &&  matrix.symfony_version == '7.*' &&  matrix.composer_flags == '' }}
+        if: ${{ matrix.php == '8.4' && matrix.symfony_version == '^7.0' && matrix.composer_flags == '' }}
         with:
           name: reports
           path: |
