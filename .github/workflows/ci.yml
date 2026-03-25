@@ -38,11 +38,9 @@ jobs:
         run: |
           if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
           composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
-      - name: Update PHPStan baseline (Symfony 7 only)
-        if: matrix.symfony_version == '7.*' || matrix.symfony_version == '8.*'
-        run: composer update-type-baseline
       - name: Static analysis with PHPStan
         run: composer checktype-ci
+        if: ${{ matrix.php == '8.4' &&  matrix.symfony_version == '7.*' &&  matrix.composer_flags == '' }}
       - name: Coding style PSR12 Check
         run: composer checkstyle
       - name: Execute tests (Unit and Feature)
