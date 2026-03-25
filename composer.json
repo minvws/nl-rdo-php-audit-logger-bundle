@@ -16,7 +16,7 @@
         "nesbot/carbon": "^2.70 | ^3.0",
         "symfony/dependency-injection": "^6.3 | ^7.0 | ^8.0",
         "symfony/http-kernel": "^6.3 | ^7.0 | ^8.0",
-        "symfony/uid": "^6.3 | ^7.0"
+        "symfony/uid": "^6.3 | ^7.0 | ^8.0"
     },
     "require-dev": {
         "dg/bypass-finals": "^1.6",
