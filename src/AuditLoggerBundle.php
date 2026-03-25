@@ -60,8 +60,6 @@ class AuditLoggerBundle extends AbstractBundle
     {
         $arrayDef = $definition->rootNode();
 
-        assert($arrayDef instanceof ArrayNodeDefinition);
-
         $arrayDef
             ->children()
             ->arrayNode('encryption')

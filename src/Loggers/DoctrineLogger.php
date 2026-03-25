@@ -41,6 +41,9 @@ class DoctrineLogger implements LoggerInterface
             $entity->setData($data);
         } else {
             assert($data['created_at'] instanceof \DateTimeImmutable);
+            assert(is_string($data['event_code']));
+            assert(is_string($data['action_code']));
+            assert(is_bool($data['failed']));
 
             $entity = new AuditEntry();
             $entity->setCreatedAt(CarbonImmutable::now());
