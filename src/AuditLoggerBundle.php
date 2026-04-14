@@ -7,6 +7,7 @@ namespace MinVWS\AuditLoggerBundle;
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use MinVWS\AuditLogger\AuditLogger;
+use MinVWS\AuditLogger\AuditLoggerInterface;
 use MinVWS\AuditLogger\Handlers\EncryptionHandler;
 use MinVWS\AuditLogger\Loggers\FileLogger;
 use MinVWS\AuditLogger\Loggers\PsrLogger;
@@ -194,6 +195,8 @@ class AuditLoggerBundle extends AbstractBundle
             $definition = $builder->getDefinition(AuditLogger::class);
             $definition->addMethodCall('addLogger', [new Reference(RabbitmqLogger::class)]);
         }
+
+        $builder->setAlias(AuditLoggerInterface::class, AuditLogger::class)->setPublic(true);
     }
 
     public function build(ContainerBuilder $container): void
