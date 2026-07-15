@@ -116,10 +116,11 @@ class AuditLoggerBundle extends AbstractBundle
     }
 
     /**
-     * @phpstan-param ConfigArray $config
+     * @param array<array-key, mixed> $config
      */
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
+        /** @var ConfigArray $config */
         $container->import('Resources/config/services.yml');
 
         if (isset($config['loggers']['psr_logger']) && $config['loggers']['psr_logger']['enabled']) {
