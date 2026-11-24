@@ -9,7 +9,7 @@
     "type": "symfony-bundle",
     "license": "EUPL-1.2",
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "doctrine/doctrine-bundle": "^2.11 | ^3.0",
         "doctrine/orm": "^2.0 | ^3.0",
         "minvws/audit-logger": "^1.1.0",
@@ -28,7 +28,7 @@
         "phpstan/phpstan-mockery": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
-        "phpunit/phpunit": "^12.0",
+        "phpunit/phpunit": "^13.4",
         "slevomat/coding-standard": "^8.14",
         "squizlabs/php_codesniffer": "^4.0",
         "symfony/var-dumper": "^6.0 | ^7.0 | ^8.0"
